@@ -115,29 +115,19 @@ constraints[type] = true;
     grid-row-end: 3;
     position: relative;
     }
-
-    @media screen and (max-width: 64em) {
+    /*Je modifie la taille de la police en fonction de la taille de l'écran*/
+    @media screen and (min-width: 30em){
         p{
-            font-size: 60px;
+            font-size: 20px;
         }
     }
 
-    @media screen and (max-width: 50em) {
+    @media screen and (min-width: 50em) {
         p{
-            font-size: 60px;
+            font-size: 30px;
         }
     }
 
-    @media screen and (max-width: 30em){
-        p{
-            font-size: 60px;
-        }
-    }
-
-    p{
-        font-size: 30px;
-        align-items : center;
-    }
 
     video{
         height: 100%; 
