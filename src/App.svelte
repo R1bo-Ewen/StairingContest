@@ -100,13 +100,7 @@ constraints[type] = true;
   </main>
   
   <style>
-    .wrapper{
-        align-items : center;
-        justify-content:center;
-        display: grid;
-        grid-template-columns: 20% 20% 20% 35%;
-        grid-template-rows: 50% 50%;
-    }
+    
 
     .box1 {
     grid-column-start: 1;
@@ -115,16 +109,46 @@ constraints[type] = true;
     grid-row-end: 3;
     position: relative;
     }
-    /*Je modifie la taille de la police en fonction de la taille de l'écran*/
-    @media screen and (min-width: 30em){
+    /*Je modifie la taille de la police et le positionnement de mon tableau en fonction de la taille de l'écran*/
+    @media screen and (min-width: 40em){
         p{
             font-size: 20px;
+        }
+
+        .wrapper{
+        align-items : center;
+        justify-content:center;
+        display: grid;
+        grid-template-columns: 20% 20% 20% 35%;
+        grid-template-rows: 100%;
+        }
+
+        .box1 {
+            grid-column-start: 1;
+            grid-column-end: 4;
+            grid-row-start: 1;
+            grid-row-end: 3;
+            position: relative;
         }
     }
 
     @media screen and (min-width: 50em) {
         p{
             font-size: 30px;
+        }
+        .wrapper{
+            align-items : center;
+            justify-content:center;
+            display: grid;
+            grid-template-columns: 20% 20% 20% 35%;
+            grid-template-rows: 50% 50%;
+        }
+        .box1 {
+            grid-column-start: 1;
+            grid-column-end: 4;
+            grid-row-start: 1;
+            grid-row-end: 3;
+            position: relative;
         }
     }
 
