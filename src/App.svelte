@@ -1,14 +1,14 @@
 <script lang='ts'>
 	import { onMount } from 'svelte';
     import * as faceapi from 'face-api.js';
+
     let video;
     
     Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromUri('./models')
+        faceapi.nets.tinyFaceDetector.loadFromDisk('./models')
     ])
-    // https://vitejs.dev/config/
+    
     const net = new faceapi.TinyFaceDetectorOptions()
-
 
     console.log(faceapi.nets)
 	
@@ -20,6 +20,7 @@
                 console.log(detections);
             }
             else{
+                document.getElementById("Je_Parle").outerHTML = "Perdu !";
                 setTimeout(GetRickRolled, 6000)
             }
             }, 100)
@@ -30,11 +31,6 @@
         document.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"; 
     }
 
-    function changeToLoosingText(){
-        document.getElementById("Je Parle").outerHTML = "<p id='Je Parle'>Perdu !</p>";
-    }
-
-    changeToLoosingText();
 
     function getUserMedia(constraints) {
       // if Promise-based API is available, use it
@@ -90,7 +86,7 @@ constraints[type] = true;
             <img src = "../images/BG_stair.jpg" alt = "Me, looking at you.">
         </div>
         <div class="box2">
-            <p id="Je Parle">
+            <p id="Je_Parle">
                 Moi contre toi, maintenant !
                 Le premier qui arrête de regarder 
                 l'autre à perdu et, crois moi, t'as
@@ -98,7 +94,7 @@ constraints[type] = true;
             </p>
         </div>
         <div class="box3">
-            <video id = "video" bind:this={video} alt = "A video of you." autoplay muted></video>
+            <video id = "video" bind:this={video} autoplay muted></video>
         </div>
     </div>
   </main>
