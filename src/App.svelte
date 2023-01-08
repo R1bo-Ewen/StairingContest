@@ -72,7 +72,7 @@ constraints[type] = true;
   <main>
     <div class="wrapper">
         <div class="box1">
-            <img src = "images/BG_stair.jpg" alt = "Me, looking at you.">
+            <img src = "../images/BG_stair.jpg" alt = "Me, looking at you.">
         </div>
         <div class="box2">
             <p>
