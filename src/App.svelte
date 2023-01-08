@@ -4,17 +4,22 @@
 
     let video;
     
+    /*Appelle de la focntion de detection facial*/
     Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromDisk('./models')
     ])
     
     const net = new faceapi.TinyFaceDetectorOptions()
-
-    console.log(faceapi.nets)
 	
     onMount(async () => {
         video.addEventListener('play', () =>{
             setInterval(async () => {
+            /*fonction devant se repéter toutes les 100ms pour la reconnaissance facial*/
+            /*Je n'ai pas réussit à faire fonctionner la fonction et es travailler dessus jusqu'au bout
+            Je voulasi faire en sorte que si l'utilisateur tournais la tête le message changeait
+            et on étant redirigé vers un lien mais la focntuon principal ne fonctionnant pas
+            je n'es pas réussit à réaliser mes attentes j'ai laissé les erreurs J'aimerai bien
+            qu'on en parle la prochaine fois */
             const detections = await faceapi.detectSingleFace(video, net);
             if (detections){
                 console.log(detections);
@@ -28,6 +33,7 @@
 	});
 
     function GetRickRolled(){
+        /*Fonction redirigeant vers un liens quand on perd*/
         document.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"; 
     }
 
@@ -77,6 +83,7 @@ constraints[type] = true;
         alert('Error: ' + err);
       });
   }
+  /*Je lance la fonction qui pour capturer la caméra de l'utilisateur*/
   getStream('video')
   </script>
   
@@ -101,14 +108,6 @@ constraints[type] = true;
   
   <style>
     
-
-    .box1 {
-    grid-column-start: 1;
-    grid-column-end: 4;
-    grid-row-start: 1;
-    grid-row-end: 3;
-    position: relative;
-    }
     /*Je modifie la taille de la police et le positionnement de mon tableau en fonction de la taille de l'écran*/
     @media screen and (min-width: 40em){
         p{
