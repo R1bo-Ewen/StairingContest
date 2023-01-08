@@ -116,6 +116,24 @@ constraints[type] = true;
     position: relative;
     }
 
+    @media screen and (max-width: 64em) {
+        p{
+            font-size: 60px;
+        }
+    }
+
+    @media screen and (max-width: 50em) {
+        p{
+            font-size: 60px;
+        }
+    }
+
+    @media screen and (max-width: 30em){
+        p{
+            font-size: 60px;
+        }
+    }
+
     p{
         font-size: 30px;
         align-items : center;
