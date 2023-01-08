@@ -26,10 +26,9 @@
         })
 	});
     function GetRickRolled(){
-        console.log('je suis passé par la');
         document.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"; 
     }
-    GetRickRolled()
+
     function getUserMedia(constraints) {
       // if Promise-based API is available, use it
         if (navigator.mediaDevices) {
