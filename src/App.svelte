@@ -6,7 +6,7 @@
     Promise.all([
         faceapi.nets.tinyFaceDetector.loadFromUri('./models')
     ])
-    
+    // https://vitejs.dev/config/
     const net = new faceapi.TinyFaceDetectorOptions()
 
 
@@ -17,17 +17,24 @@
             setInterval(async () => {
             const detections = await faceapi.detectSingleFace(video, net);
             if (detections){
-                return;
+                console.log(detections);
             }
             else{
-                GetRickRolled()
+                setTimeout(GetRickRolled, 6000)
             }
             }, 100)
         })
 	});
+
     function GetRickRolled(){
         document.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"; 
     }
+
+    function changeToLoosingText(){
+        document.getElementById("Je Parle").outerHTML = "<p id='Je Parle'>Perdu !</p>";
+    }
+
+    changeToLoosingText();
 
     function getUserMedia(constraints) {
       // if Promise-based API is available, use it
@@ -83,7 +90,7 @@ constraints[type] = true;
             <img src = "../images/BG_stair.jpg" alt = "Me, looking at you.">
         </div>
         <div class="box2">
-            <p>
+            <p id="Je Parle">
                 Moi contre toi, maintenant !
                 Le premier qui arrête de regarder 
                 l'autre à perdu et, crois moi, t'as
@@ -116,16 +123,6 @@ constraints[type] = true;
     p{
         font-size: 30px;
         align-items : center;
-    }
-
-    .abspos {
-    position: absolute;
-    top: 40px;
-    left: 40px;
-    background-color: rgba(255,255,255,.5);
-    border: 1px solid rgba(0,0,0,0.5);
-    color: #000;
-    padding: 10px;
     }
 
     video{
