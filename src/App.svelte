@@ -16,11 +16,18 @@
         video.addEventListener('play', () =>{
             setInterval(async () => {
             const detections = await faceapi.detectSingleFace(video, net);
-            console.log(detections)
+            if (detections){
+                return;
+            }
+            else{
+                GetRickRolled()
+            }
             }, 100)
         })
 	});
-
+    function GetRickRolled(){
+        document.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"; 
+    }
     function getUserMedia(constraints) {
       // if Promise-based API is available, use it
         if (navigator.mediaDevices) {
