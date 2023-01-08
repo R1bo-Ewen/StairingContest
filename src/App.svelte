@@ -14,7 +14,7 @@
 	
     onMount(async () => {
         video.addEventListener('play', () =>{
-            setInterval(async () =>{
+            setInterval(async () => {
             const detections = await faceapi.detectSingleFace(video, net);
             console.log(detections)
             }, 100)
@@ -72,7 +72,7 @@ constraints[type] = true;
   <main>
     <div class="wrapper">
         <div class="box1">
-            <img src = "images/BG_stair.jpg">
+            <img src = "images/BG_stair.jpg" alt = "Me, looking at you.">
         </div>
         <div class="box2">
             <p>
@@ -89,9 +89,6 @@ constraints[type] = true;
   </main>
   
   <style>
-    main{
-
-    }
     .wrapper{
         align-items : center;
         justify-content:center;
