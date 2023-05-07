@@ -17,43 +17,55 @@
 
     obtenerVideoCamara();
 
+    function reinitialised(){
+        //Fonction pour réinitialiser tous les placements et les dimensions
+        document.getElementById("endPicture").style.height = "100%";
+        document.getElementById("endPicture").style.width = "101%";
+
+        document.getElementById("enemy").style.height = "100%";
+        document.getElementById("enemy").style.width = "84%";
+
+        document.getElementById("enemyWin").style.display = "none";
+        document.getElementById("playerWin").style.display = "none";
+
+        document.getElementById("buttonBoxId").style.display = "none";
+        document.getElementById("utilityDivText").style.display = "block";
+
+        document.getElementById("endPicture").style.display = "none";
+        document.getElementById("video").style.display = "block";
+    }
+
+    function winnerFunction(result){
+        let loser;
+        let winner;
+        if (result == 1){
+            loser = "enemy"
+            winner = "endPicture"
+        }
+        else{
+            loser = "endPicture"
+            winner = "enemy"
+        }
+        document.getElementById(loser).style.height = "84%";
+        document.getElementById(loser).style.width = "84%";
+        document.getElementById(winner).style.height = "110%";
+        document.getElementById(winner).style.width = "111%";
+        document.getElementById(winner+"Win").style.display = "block";
+        document.getElementById("video").style.display = "none";
+        document.getElementById("endPicture").style.display = "block";
+    }
+
     /*Je lance la fonction qui pour capturer la caméra de l'utilisateur*/
     function endOfGame(){
         document.getElementById("buttonBoxId").style.display = "block";
         document.getElementById("utilityDivText").style.display = "none";
         document.getElementById("utilityButton").innerHTML = "Rejouer";
-        let winner = Math.floor(Math.random() * 2);
-        if (winner == 1){
-            document.getElementById("enemy").style.height = "84%";
-            document.getElementById("enemy").style.width = "84%";
-            document.getElementById("video").style.height = "110%";
-            document.getElementById("video").style.width = "111%";
-            document.getElementById("playerWin").style.display = "block";
-            document.getElementById("video").style.display = "none";
-            document.getElementById("endPicture").style.display = "block";
-        }
-        else{
-            document.getElementById("video").style.height = "84%";
-            document.getElementById("video").style.width = "84%";
-            document.getElementById("enemy").style.height = "90%";
-            document.getElementById("enemy").style.width = "90%";
-            document.getElementById("enemyWin").style.display = "block";
-            document.getElementById("video").style.display = "none";
-            document.getElementById("endPicture").style.display = "block";
-        }
+        let winnerResult = Math.floor(Math.random() * 2);
+        winnerFunction(winnerResult);
     }
 
     function fonctionGame(){
-        document.getElementById("video").style.height = "100%";
-        document.getElementById("video").style.width = "101%";
-        document.getElementById("enemy").style.height = "100%";
-        document.getElementById("enemy").style.width = "84%";
-        document.getElementById("enemyWin").style.display = "none";
-        document.getElementById("playerWin").style.display = "none";
-        document.getElementById("buttonBoxId").style.display = "none";
-        document.getElementById("utilityDivText").style.display = "block";
-        document.getElementById("endPicture").style.display = "none";
-        document.getElementById("video").style.display = "block";
+        reinitialised();
         for(let i = 0; i <= 10; i++){
             setTimeout(() => {document.getElementById("utilityText").innerHTML = (10-i).toString()}, i*1000);
         }
@@ -73,7 +85,7 @@
             </p>
         </div>
         <div class="box3">
-            <p class="winnerText" id="playerWin">
+            <p class="winnerText" id="endPictureWin">
                 Winner !
             </p>
         </div>
