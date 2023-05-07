@@ -1,164 +1,160 @@
 <script lang='ts'>
-	import { onMount } from 'svelte';
-    import * as faceapi from 'face-api.js';
-
-    let video;
-    
-    /*Appelle de la focntion de detection facial*/
-    Promise.all([
-        faceapi.nets.tinyFaceDetector.loadFromDisk('./models')
-    ])
-    
-    const net = new faceapi.TinyFaceDetectorOptions()
-	
-    onMount(async () => {
-        video.addEventListener('play', () =>{
-            setInterval(async () => {
-            /*fonction devant se repéter toutes les 100ms pour la reconnaissance facial*/
-            /*Je n'ai pas réussit à faire fonctionner la fonction et es travailler dessus jusqu'au bout
-            Je voulasi faire en sorte que si l'utilisateur tournais la tête le message changeait
-            et on étant redirigé vers un lien mais la focntuon principal ne fonctionnant pas
-            je n'es pas réussit à réaliser mes attentes j'ai laissé les erreurs J'aimerai bien
-            qu'on en parle la prochaine fois */
-            const detections = await faceapi.detectSingleFace(video, net);
-            if (detections){
-                console.log(detections);
-            }
-            else{
-                document.getElementById("Je_Parle").outerHTML = "Perdu !";
-                setTimeout(GetRickRolled, 6000)
-            }
-            }, 100)
-        })
-	});
-
-    function GetRickRolled(){
-        /*Fonction redirigeant vers un liens quand on perd*/
-        document.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"; 
-    }
-
-
-    function getUserMedia(constraints) {
-      // if Promise-based API is available, use it
-        if (navigator.mediaDevices) {
-            return navigator.mediaDevices.getUserMedia(constraints);
+    let videoSource = null;
+    let loading = false;
+    const obtenerVideoCamara = async () => {
+        try {
+        loading = true;
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+        });
+        videoSource.srcObject = stream;
+        videoSource.play();
+        loading = false;
+        } catch (error) {
+        console.log(error);
         }
-        
-      // otherwise try falling back to old, possibly prefixed API...
-        var legacyApi = navigator.getUserMedia || navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia || navigator.msGetUserMedia;
-            
-        if (legacyApi) {
-            // ...and promisify it
-            return new Promise(function (resolve, reject) {
-            legacyApi.bind(navigator)(constraints, resolve, reject);
-            });
+    };
+
+    obtenerVideoCamara();
+
+    /*Je lance la fonction qui pour capturer la caméra de l'utilisateur*/
+    function endOfGame(){
+        document.getElementById("buttonBoxId").style.display = "block";
+        document.getElementById("utilityDivText").style.display = "none";
+        document.getElementById("utilityButton").innerHTML = "Rejouer";
+        let winner = Math.floor(Math.random() * 2);
+        if (winner == 1){
+            document.getElementById("enemy").style.height = "84%";
+            document.getElementById("enemy").style.width = "84%";
+            document.getElementById("video").style.height = "110%";
+            document.getElementById("video").style.width = "111%";
+            document.getElementById("playerWin").style.display = "block";
+            document.getElementById("video").style.display = "none";
+            document.getElementById("endPicture").style.display = "block";
+        }
+        else{
+            document.getElementById("video").style.height = "84%";
+            document.getElementById("video").style.width = "84%";
+            document.getElementById("enemy").style.height = "90%";
+            document.getElementById("enemy").style.width = "90%";
+            document.getElementById("enemyWin").style.display = "block";
+            document.getElementById("video").style.display = "none";
+            document.getElementById("endPicture").style.display = "block";
         }
     }
-    function getStream (type) {
-        if (!navigator.mediaDevices && !navigator.getUserMedia && !navigator.webkitGetUserMedia &&
-            !navigator.mozGetUserMedia && !navigator.msGetUserMedia) {
-            alert('User Media API not supported.');
-            return;
-    }
 
-var constraints = {};
-constraints[type] = true;
-    
-    getUserMedia(constraints)
-      .then(function (stream) {
-        var mediaControl = document.querySelector(type);
-        
-        if ('srcObject' in mediaControl) {
-          mediaControl.srcObject = stream;
-        } else if (navigator.mozGetUserMedia) {
-          mediaControl.mozSrcObject = stream;
-        } else {
-          mediaControl.src = (window.URL || window.webkitURL).createObjectURL(stream);
+    function fonctionGame(){
+        document.getElementById("video").style.height = "100%";
+        document.getElementById("video").style.width = "101%";
+        document.getElementById("enemy").style.height = "100%";
+        document.getElementById("enemy").style.width = "84%";
+        document.getElementById("enemyWin").style.display = "none";
+        document.getElementById("playerWin").style.display = "none";
+        document.getElementById("buttonBoxId").style.display = "none";
+        document.getElementById("utilityDivText").style.display = "block";
+        document.getElementById("endPicture").style.display = "none";
+        document.getElementById("video").style.display = "block";
+        for(let i = 0; i <= 10; i++){
+            setTimeout(() => {document.getElementById("utilityText").innerHTML = (10-i).toString()}, i*1000);
         }
-        
-        mediaControl.play();
-      })
-      .catch(function (err) {
-        alert('Error: ' + err);
-      });
-  }
-  /*Je lance la fonction qui pour capturer la caméra de l'utilisateur*/
-  getStream('video')
-  </script>
-  
-  <main>
+        setTimeout(endOfGame, 11000);
+    }
+</script>
+    
+
+<header>
+    <h1>Staring Contest</h1>
+</header>
+<main>
     <div class="wrapper">
         <div class="box1">
-            <img src = "../images/BG_stare.png" alt = "Me, looking at you.">
-        </div>
-        <div class="box2">
-            <p id="Je_Parle">
-                Moi contre toi, maintenant !
-                Le premier qui arrête de regarder 
-                l'autre à perdu et, crois moi, t'as
-                pas envie de perdre !
+            <p class="winnerText" id="enemyWin">
+                Winner !
             </p>
         </div>
         <div class="box3">
-            <video id = "video" bind:this={video} autoplay muted></video>
+            <p class="winnerText" id="playerWin">
+                Winner !
+            </p>
+        </div>
+        <div class="box4">
+            <img src = "../images/BG_stare.png" alt = "Me, looking at you." id="enemy">
+        </div>
+        <div class="counter" id="utilityDivText">
+            <p id="utilityText">
+                10
+            </p>
+        </div>
+        <div class="buttonBox" id="buttonBoxId">
+            <button id="utilityButton" on:click = {fonctionGame}>
+                Start !
+            </button>
+        </div>
+        <div class="box6">
+            <video id = "video" bind:this={videoSource} autoplay muted></video>
+            <img src = "" alt="Picture of you winning." id="endPicture">
         </div>
     </div>
-  </main>
-  
-  <style>
-    
-    /*Je modifie la taille de la police et le positionnement de mon tableau en fonction de la taille de l'écran*/
-    @media screen and (min-width: 40em){
-        p{
-            font-size: 20px;
-        }
+</main>
+<style>
 
-        .wrapper{
+    header{
+        margin-top: auto;
+    }
+
+    .winnerText{
+        font-size: 200%;
+        display: none;
+    }
+
+    .wrapper{
         align-items : center;
-        justify-content:center;
         display: grid;
-        grid-template-columns: 20% 20% 20% 35%;
-        grid-template-rows: 100%;
-        }
-
-        .box1 {
-            grid-column-start: 1;
-            grid-column-end: 4;
-            grid-row-start: 1;
-            grid-row-end: 3;
-            position: relative;
-        }
+        grid-template-columns: 45% 10% 45%;
+        grid-template-rows: 20% 80%;
     }
 
-    @media screen and (min-width: 50em) {
-        p{
-            font-size: 30px;
-        }
-        .wrapper{
-            align-items : center;
-            justify-content:center;
-            display: grid;
-            grid-template-columns: 20% 20% 20% 35%;
-            grid-template-rows: 50% 50%;
-        }
-        .box1 {
-            grid-column-start: 1;
-            grid-column-end: 4;
-            grid-row-start: 1;
-            grid-row-end: 3;
-            position: relative;
-        }
+    .buttonBox {
+        grid-column: 2;
+        grid-row-start: 2;
+        position: relative;
     }
 
+    .counter {
+        grid-column: 2;
+        grid-row-start: 2;
+        position: relative;
+        display: none;
+    }
+
+    .box4{
+        grid-column: 1;
+        grid-row-start: 2;
+        position: relative;
+    }
+
+    .box3{
+        grid-column: 3;
+        grid-row-start: 1;
+        position: relative;
+    }
+
+    .box6{
+        grid-column: 3;
+        grid-row-start: 2;
+        position: relative;
+    }
 
     video{
         height: 100%; 
-        width: 100%;
+        width: 101%;
     }
 
     img{
         height: 100%; 
-        width: 100%;
+        width: 84%;
     }
-  </style>
+    #endPicture{
+        display: none;
+    }
+</style>
