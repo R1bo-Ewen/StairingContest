@@ -1,11 +1,11 @@
 <script lang='ts'>
     let videoSource = null;
     let loading = false;
-    const obtenerVideoCamara = async () => {
+    const getVideoCam = async () => {
         try {
         loading = true;
         const stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
+            video: {width: 320, height: 320}
         });
         videoSource.srcObject = stream;
         videoSource.play();
@@ -15,50 +15,51 @@
         }
     };
 
-    obtenerVideoCamara();
+    getVideoCam();
 
     function reinitialised(){
         //Fonction pour réinitialiser tous les placements et les dimensions
-        document.getElementById("endPicture").style.height = "100%";
-        document.getElementById("endPicture").style.width = "101%";
 
-        document.getElementById("enemy").style.height = "100%";
-        document.getElementById("enemy").style.width = "84%";
-
-        document.getElementById("enemyWin").style.display = "none";
+        document.getElementById("ennemyWin").style.display = "none";
         document.getElementById("playerWin").style.display = "none";
 
-        document.getElementById("buttonBoxId").style.display = "none";
-        document.getElementById("utilityDivText").style.display = "block";
+        document.getElementById("player").style.width = "70%";
+        document.getElementById("player").style.height = "70%";
+        document.getElementById("ennemy").style.width = "70%";
+        document.getElementById("ennemy").style.height = "70%";
 
-        document.getElementById("endPicture").style.display = "none";
-        document.getElementById("video").style.display = "block";
+        document.getElementById("utilityButton").style.display = "none";
+        document.getElementById("utilityText").style.display = "inline";
+
+        document.getElementById("player").style.display = "none";
+        document.getElementById("video").style.display = "inline";
     }
 
     function winnerFunction(result){
         let loser;
         let winner;
         if (result == 1){
-            loser = "enemy"
-            winner = "endPicture"
+            loser = "ennemy"
+            winner = "player"
         }
         else{
-            loser = "endPicture"
-            winner = "enemy"
+            loser = "player"
+            winner = "ennemy"
         }
-        document.getElementById(loser).style.height = "84%";
-        document.getElementById(loser).style.width = "84%";
-        document.getElementById(winner).style.height = "110%";
-        document.getElementById(winner).style.width = "111%";
-        document.getElementById(winner+"Win").style.display = "block";
+        var canvasPlayerPicture = <HTMLCanvasElement> document.getElementById('player');
+        var ctx = canvasPlayerPicture.getContext('2d');
+        ctx.drawImage(videoSource, 0, 0);
+        document.getElementById(winner+"Win").style.display = "inline";
+        document.getElementById(loser).style.width = "55%";
+        document.getElementById(loser).style.height = "55%";
         document.getElementById("video").style.display = "none";
-        document.getElementById("endPicture").style.display = "block";
+        document.getElementById("player").style.display = "inline";
     }
 
-    /*Je lance la fonction qui pour capturer la caméra de l'utilisateur*/
     function endOfGame(){
-        document.getElementById("buttonBoxId").style.display = "block";
-        document.getElementById("utilityDivText").style.display = "none";
+        /*Je lance la fonction qui pour capturer la caméra de l'utilisateur*/
+        document.getElementById("utilityButton").style.display = "inline";
+        document.getElementById("utilityText").style.display = "none";
         document.getElementById("utilityButton").innerHTML = "Rejouer";
         let winnerResult = Math.floor(Math.random() * 2);
         winnerFunction(winnerResult);
@@ -73,48 +74,66 @@
     }
 </script>
     
-
+<canvas id="redBackground"/>
+<canvas id="blueBackground"/>
 <header>
     <h1>Staring Contest</h1>
 </header>
 <main>
-    <div class="wrapper">
-        <div class="box1">
-            <p class="winnerText" id="enemyWin">
+    <div class="wrapper" id="wrapperPrincipal">
+        <div class="boxTextWinEnnemy">
+            <p class="winnerText" id="ennemyWin">
                 Winner !
             </p>
         </div>
-        <div class="box3">
-            <p class="winnerText" id="endPictureWin">
-                Winner !
-            </p>
-        </div>
-        <div class="box4">
-            <img src = "../images/BG_stare.png" alt = "Me, looking at you." id="enemy">
-        </div>
-        <div class="counter" id="utilityDivText">
+        <div class="utilityBox" id="utilityDivText">
             <p id="utilityText">
                 10
             </p>
-        </div>
-        <div class="buttonBox" id="buttonBoxId">
             <button id="utilityButton" on:click = {fonctionGame}>
                 Start !
             </button>
         </div>
-        <div class="box6">
-            <video id = "video" bind:this={videoSource} autoplay muted></video>
-            <img src = "" alt="Picture of you winning." id="endPicture">
+        <div class="boxTextWinPlayer">
+            <p class="winnerText" id="playerWin">
+                Winner !
+            </p>
+        </div>
+        <div class="ennemyDisplay">
+            <img src = "../images/BG_stare.png" alt = "Me, looking at you." id="ennemy">
+        </div>
+        <div class="playerDisplay">
+            <video id = "video" bind:this={videoSource} width=50 height=50 autoplay muted></video>
+            <canvas id = "player" height="320" width="320">Your browser doesn't support  </canvas>
         </div>
     </div>
 </main>
 <style>
 
+    #blueBackground{
+        position: absolute ;
+        background: #535bf2;
+        left:50%;
+        top:0;
+        height: 100%; 
+        width: 50%;
+        z-index:-1;
+    }
+    #redBackground{
+        position: absolute ;
+        background: #f25353;
+        left:0;
+        top:0;
+        height: 100%; 
+        width: 50%;
+        z-index:-1;
+    }
+
     header{
         margin-top: auto;
     }
 
-    .winnerText{
+    p{
         font-size: 200%;
         display: none;
     }
@@ -122,51 +141,50 @@
     .wrapper{
         align-items : center;
         display: grid;
-        grid-template-columns: 45% 10% 45%;
+        grid-template-columns: 45% 5% 5% 45%;
         grid-template-rows: 20% 80%;
     }
 
-    .buttonBox {
-        grid-column: 2;
+    .utilityBox {
+        grid-column: 2/4;
+        grid-row-start: 1;
+        position: center;
+    }
+
+    .ennemyDisplay{
+        grid-column: 1/3;
         grid-row-start: 2;
         position: relative;
     }
 
-    .counter {
-        grid-column: 2;
-        grid-row-start: 2;
-        position: relative;
-        display: none;
-    }
-
-    .box4{
-        grid-column: 1;
-        grid-row-start: 2;
-        position: relative;
-    }
-
-    .box3{
-        grid-column: 3;
+    .boxTextWinPlayer{
+        grid-column: 4;
         grid-row-start: 1;
         position: relative;
     }
 
-    .box6{
-        grid-column: 3;
+    .playerDisplay{
+        grid-column: 3/5;
         grid-row-start: 2;
         position: relative;
     }
 
     video{
-        height: 100%; 
-        width: 101%;
+        height: 70%; 
+        width: 70%;
     }
 
     img{
-        height: 100%; 
-        width: 84%;
+        height: 70%; 
+        width: 70%;
     }
-    #endPicture{
+
+    #player{
         display: none;
     }
+
+    #utilityText{
+        display: none;
+    }
+
 </style>
